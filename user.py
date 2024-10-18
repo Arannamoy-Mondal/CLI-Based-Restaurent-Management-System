@@ -24,17 +24,22 @@ class Customer(User):
         # print(item)
         if item:
             # self.cart.append(itemName)
-            item.quantity=quantity
-            self.cart.addItem(item)
-            print('item added')
+            # item.quantity=quantity
+            if quantity>item.quantity:
+                print('Item quantity exceeded !')
+                return
+            else:
+              item.quantity=quantity
+              self.cart.addItem(item)
+              print('item added')
             # pass
         else:
             print('Item not found')
 
     def viewCart(self):
         for item,quantity in self.cart.items.items():
-            print(f'{item.name} {item.price} {quantity}')
-        print(f'Total price: {self.cart.totalPrice()}')
+            print(f'Item name: {item.name}, Item price: {item.price}, Item quantity: {quantity}')
+        print(f'Total price: {self.cart.totalPrice}')
         
 
 class Order:
@@ -45,6 +50,7 @@ class Order:
             self.items[item] += item.quantity
         else:
             self.items[item] = item.quantity
+    @property
     def totalPrice(self):
         total_price=0
         for item in self.items:
