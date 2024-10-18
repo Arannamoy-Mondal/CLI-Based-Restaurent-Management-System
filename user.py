@@ -1,154 +1,150 @@
-'''
-3 type user:
-Customer
-Employee
-Admin
-'''
-from abc import ABC
-
-# Common class for every user
+from abc import *
+'''3 type of employee:
+Customer, Employee, Admin'''
 class User(ABC):
-    def __init__(self,name,phone,email,address):
+    def __init__(self,name,email,address,phone):
+        super().__init__()
         self.name=name
-        self.phone=phone
         self.email=email
         self.address=address
-        super().__init__()
-# Employee class
+        self.phone=phone
+
+class Customer(User):
+    def __init__(self, name, email, address, phone):
+        super().__init__(name, email, address, phone)
+        self.cart=Order()
+    
+    def viewMenu(self,restaurant):
+        restaurant.menu.showMenuItem()
+
+    def addToCart(self,restaurant,itemName,quantity):
+        item=restaurant.menu.findItem(itemName)
+        # print(itemName)
+        # print(itemQuantity)
+        # print(item)
+        if item:
+            # self.cart.append(itemName)
+            item.quantity=quantity
+            self.cart.addItem(item)
+            print('item added')
+            # pass
+        else:
+            print('Item not found')
+
+    def viewCart(self):
+        for item,quantity in self.cart.items.items():
+            print(f'{item.name} {item.price} {quantity}')
+        print(f'Total price: {self.cart.totalPrice()}')
+        
+
+class Order:
+    def __init__(self):
+        self.items={}
+    def addItem(self,item):
+        if item in self.items:
+            self.items[item] += item.quantity
+        else:
+            self.items[item] = item.quantity
+    def totalPrice(self):
+        total_price=0
+        for item in self.items:
+            total_price+=(item.quantity*item.price)
+        return total_price
+
 class Employee(User):
-    def __init__(self, name, phone, email, address,age,designation,salary):
-        super().__init__(name, phone, email, address) # using inheritance
+    def __init__(self, name, email, address, phone,age,designation,salary):
+        super().__init__(name, email, address, phone)
         self.age=age
         self.designation=designation
         self.salary=salary
+    def __repr__(self):
+        return f'Name: {self.name}, Email: {self.email}, Address: {self.address}, Phone: {self.phone}, Age: {self.age}, Designation: {self.designation}, Salary: {self.salary}$'
+    
 
 class Admin(User):
-    def __init__(self, name, phone, email, address,):
-        super().__init__(name, phone, email, address)
+    def __init__(self, name, email, address, phone):
+        super().__init__(name, email, address, phone)
+        self.employees=[]
 
-    def addEmployee(self,restaurent,employee):
-         restaurent.addEmployee(employee)
-         print(f'\n\tEmployee add successfully.')
-    
-    def viewEmployee(self,restaurent):
-        restaurent.viewEmployee()
+    def addEmployee(self,restaurant,name, email, address, phone,age,designation,salary):
+        restaurant.addEmployee(name, email, address, phone,age,designation,salary)
 
-    def addNewItem(self,res,item):
-        name=item.name
-        price=item.price
-        quantity=item.quantity
-        res.menu.addItem(name,price,quantity)
-# Restaurent class
-class Restaurent:
+    def viewEmployee(self,restaurant):
+        restaurant.viewEmployee()
+
+    def addNewItem(self,restaurant,item):
+        restaurant.menu.addMenuItem(item)
+
+    def removeItem(self,restaurant,item):
+        restaurant.menu.removeItem(item)
+    def __repr__(self):
+        return f'Name: {self.name}, Email: {self.email}, Address: {self.address}, Phone: {self.phone}'
+
+class Restaurant:
     def __init__(self,name):
         self.name=name
-        self.employeeList=[]
+        self.employees=[]
         self.menu=Menu()
-    def addEmployee(self,employee):
-         self.employeeList.append(employee)
-         print(f'\n\tEmployee add successfully.')   
-
+    def addEmployee(self,name, email, address, phone,age,designation,salary):
+        self.employees.append(Employee(name, email, address, phone,age,designation,salary))
     def viewEmployee(self):
-        for i in self.employeeList:
-            print(f'\n\tName: {i.name}, Phone: {i.phone}, Email: {i.email}, Address: {i.address}, Age: {i.age}, Salary: {i.salary}$')
+        for employee in self.employees:
+            print(employee)
 
-
-# Menu Class
 class Menu:
     def __init__(self):
-        self.itemList=[]
-    
-    def addItem(self,name,price,quantity):
-        item=Item(name,price,quantity)
-        self.itemList.append(item)
-        return item
-    
-    def showItem(self):
-        for it in self.itemList:
-            print(f'Name: {it.name}, Price: {it.price}$, Quantity: {it.quantity}')
-
-    def findItem(self,item):
-        for i in self.itemList:
-            if item.lower()==i.name.lower():
-                return i  
+        self.items=[]
+    def addMenuItem(self,item):
+        self.items.append(item)
+    def findItem(self,itemName):
+        for item in self.items:
+            # print('in Menu class findItem method for loop')
+            # print(f'item.name.lower()==itemName.lower(){item.name.lower()} {itemName.lower()}')
+            if item.name.lower()==itemName.lower():
+                return item
         return None
-    
     def removeItem(self,itemName):
         item=self.findItem(itemName)
         if item:
-            self.itemList.remove(item)
-            print('tItem deleted')
+            self.items.remove(item)
+            print('Item deleted')
         else:
-            print('\tItem not found')
+            print('Item not found')
+    def showMenuItem(self):
+        for item in self.items:
+            print(f'Name: {item.name}, Price: {item.price}, Quantity: {item.quantity}')
 
-
-# item class
-class Item:
+class foodItem:
     def __init__(self,name,price,quantity):
         self.name=name
         self.price=price
         self.quantity=quantity
 
-# customer class
-
-class Customer(User):
-    def __init__(self, name, phone, email, address):
-        super().__init__(name, phone, email, address)
-        self.cart=Order()
-
-    def UserShowItem(self,res):
-        res.menu.showItem()
-
-    def UserAddToCart(self,restaurant,item_name,quantity):
-        item=restaurant.findItem(item_name)
-        if item:
-            item.quantity=quantity
-            self.cart.addItem(item)
-            print('Add successfully.')
-        else:
-            print('Item not found.')
-
-    def UserViewCart(self):
-        print('\tView Cart')
-        print('Name\tPrice\tQuantity')
-        for item,quantity in self.cart.items.items():
-            print(f'{item.name}\t{item.price}\t{quantity}')
-        print(f'Total Price{self.cart.totalPrice}')
-
-
-# Order Class
-class Order:
-    def __init__(self):
-        self.items={}
-    
-    def addItem(self,item):
-        if item in self.item:
-            self.items[item]+=item.quantity # if item is available in cart
-        else:
-            self.items[item]+=item.quantity
-
-    def removeItem(self,item):
-        if item in self.items:
-            # self.items.remove(item)
-            del self.items[item]     
-
-    def totalPrice(self,item):
-        return(item.price*quantity for item,quantity in self.items.items())
-
-    def clear(self):
-        self.items={}
-
-admin1=Admin('Admin1','12345678912','admin1@admin.ca','Cape Breton, Nova Scotia')
-# admin1.addEmployee('Emp1','12345678913','emp1@emp.ca','Cape Breton, Nova Scotia','35','Sr. Engineer','150K')
-# admin1.viewEmployee()
-menu1=Menu()
-menu1.addItem('Cappuccino','5.95','20')
-menu1.addItem('Latte','4.97','20')
-menu1.addItem('Americano','5.95','20')
-res1=Restaurent('\tWoodroad')
-Customer1=Customer('Customer1','012345678912','customer1@customer.com','Cape Breton')
-admin1.addNewItem(res1,Item('Cappuccino','5.95','20'))
-admin1.addNewItem(res1,Item('Latte','4.97','20'))
-admin1.addNewItem(res1,Item('Americano','5.95','20'))
-Customer1.UserShowItem(res1)
-Customer1.UserViewCart()
+     
+emp=Employee('Emp1','emp1@emp.com','Cape Breton','12345678912','24','Sr Engineer',2400)    
+# print(emp)
+Restaurant1=Restaurant('Restaurant1')
+admin=Admin('Admin1','admin1@gmail.com','Cape Breton', '12345678901')
+admin.addEmployee(Restaurant1,'Emp1','emp1@emp.com','Cape Breton','12345678912','24','Sr Engineer',2400)
+Restaurant1.viewEmployee()
+print('***************')
+admin.viewEmployee(Restaurant1)
+print('***************')
+mn=Menu()
+food=foodItem('Cappucino',5.97,10)
+mn.addMenuItem(food)
+mn.showMenuItem()
+print('***************')
+item1=foodItem('Cappucino',5,10)
+item2=foodItem('Latte',4.97,10)
+item3=foodItem('Americano',5,10)
+admin.addNewItem(Restaurant1,item1)
+admin.addNewItem(Restaurant1,item2)
+admin.addNewItem(Restaurant1,item3)
+Customer1=Customer('Customer1','customer1@customer.com','Cape Breton','12345678912')
+Customer1.viewMenu(Restaurant1)
+print('***************')
+itemName=input('Enter item name:')
+itemQuantity=int(input('Enter item quantity:'))
+Customer1.addToCart(Restaurant1,itemName,itemQuantity)
+Customer1.viewCart( )
