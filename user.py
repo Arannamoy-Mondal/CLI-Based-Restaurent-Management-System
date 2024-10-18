@@ -43,7 +43,7 @@ class Customer(User):
         
     def payBill(self):
         print(f'Total price: {self.cart.totalPrice}.\nPayment Successful.')
-        self.cart.clear()
+        self.cart=Order()
 
 
 class Employee(User):
@@ -72,7 +72,7 @@ class Admin(User):
 
     def viewItem(self,restaurant):
         restaurant.menu.showMenuItem()
-        
+
     def removeItem(self,restaurant,item):
         restaurant.menu.removeItem(item)
     def __repr__(self):

@@ -51,7 +51,7 @@ def customerMenu():
             customer.viewMenu(res1)
         elif choice==2:
             itemName=input("Enter item name:")
-            itemQuantity=input("Enter item quantity:")
+            itemQuantity=int(input("Enter item quantity:"))
             customer.addToCart(res1,itemName,itemQuantity)
         elif choice==3:
             customer.viewCart()
