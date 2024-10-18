@@ -1,7 +1,3 @@
-from user import *
-from menu import *
-from footItem import *
-from restaurant import *
 class Order:
     def __init__(self):
         self.items={}

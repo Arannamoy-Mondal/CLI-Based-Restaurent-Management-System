@@ -57,4 +57,61 @@ def customerMenu():
             customer.viewCart()
         elif choice==4:
             customer.payBill()
+        else:
+            print('Invalid choice')
 
+def adminMenu():
+    name=input("Enter name:")
+    email=input("Enter email:")
+    phone=input("Enter phone:")
+    address=input("Enter address:")
+    admin=Admin(name=name,email=email,address=address,phone=phone)
+    while True:
+        print(f"Welcome {admin.name}!!!")
+        print(f"1. Add new item.")
+        print(f"2. Add employee")
+        print(f"3. View employee")
+        print(f"4. View item")
+        print(f"4. Remove item")
+        print(f"0. Exit")
+        choice=int(input("Enter your choice:"))
+        if choice==0:
+            break
+        elif choice==1:
+            name=input("Enter item name:")
+            price=int(input("Enter item price:"))
+            quantity=int(input("Enter item quantity:"))
+            admin.addNewItem(res1,foodItem(name=name,price=price,quantity=quantity))
+        elif choice==2:
+            name=input("Enter employee name:")
+            email=input("Enter email address:")
+            address=input("Enter address:")
+            phone=input("Enter phone:")
+            age=input("Enter age:")
+            designation=input("Enter designation:")
+            salary=input("Enter salary:")
+            emp=Employee(name=name,email=email,address=address,phone=phone,age=age,designation=designation,salary=salary)
+            admin.addEmployee(res1,emp)
+        elif choice==3:
+            res1.viewEmployee()
+        elif choice==4:
+            admin.viewItem(res1)
+        elif choice==5:
+            itemName=input("Enter item name:")
+            admin.removeItem(res1,itemName)
+        else:
+            print('Invalid choice')
+
+while True:
+    print("1. Customer")
+    print("2. Admin")
+    print("0. Exit")
+    choice=int(input("Enter option:"))
+    if choice==1:
+        customerMenu()
+    elif choice==2:
+        adminMenu()
+    elif choice==0:
+        break
+    else:
+        print("Invalid")

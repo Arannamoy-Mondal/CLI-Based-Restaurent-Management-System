@@ -1,8 +1,5 @@
-from abc import *
-from footItem import *
-from order import *
-from menu import *
-from restaurant import *
+from abc import ABC
+from order import Order
 '''3 type of employee:
 Customer, Employee, Admin'''
 class User(ABC):
@@ -46,7 +43,7 @@ class Customer(User):
         
     def payBill(self):
         print(f'Total price: {self.cart.totalPrice}.\nPayment Successful.')
-        self.cart=[]
+        self.cart.clear()
 
 
 class Employee(User):
@@ -64,8 +61,8 @@ class Admin(User):
         super().__init__(name, email, address, phone)
         self.employees=[]
 
-    def addEmployee(self,restaurant,name, email, address, phone,age,designation,salary):
-        restaurant.addEmployee(name, email, address, phone,age,designation,salary)
+    def addEmployee(self,restaurant,emp):
+        restaurant.addEmployee(emp)
 
     def viewEmployee(self,restaurant):
         restaurant.viewEmployee()
@@ -73,6 +70,9 @@ class Admin(User):
     def addNewItem(self,restaurant,item):
         restaurant.menu.addMenuItem(item)
 
+    def viewItem(self,restaurant):
+        restaurant.menu.showMenuItem()
+        
     def removeItem(self,restaurant,item):
         restaurant.menu.removeItem(item)
     def __repr__(self):
